@@ -2,7 +2,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import data from "./data.js";
 import LanguageModal from "./LanguageModal.js";
-import languageData from "./languageData.js";
+import languages from "./languages.js";
 
 function App() {
   const { sections } = data;
@@ -10,7 +10,7 @@ function App() {
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
   const [selectedSectionId, setSelectedSectionId] = useState(sections[0].id);
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState();
-  const [query, changeQuery] = useState("");
+  const [query, setQuery] = useState("");
   const [language, setLanguage] = useState("ro");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,14 +33,12 @@ function App() {
       )}
       <div className="page-header">
         <div className="corner-buttons">
-          {languageData.languages.map(
-            (currlanguage) =>
-              currlanguage.id === language && (
-                <div className="button" onClick={() => setIsModalOpen(true)}>
-                  <img src={currlanguage.flagUrl} alt="romanian" />
-                </div>
-              )
-          )}
+          <div className="button" onClick={() => setIsModalOpen(true)}>
+            <img
+              src={languages.find((x) => x.id === language).flagUrl}
+              alt={languages.find((x) => x.id === language).name}
+            />
+          </div>
 
           <div className="button">
             <div className="dot-wrapper">
@@ -64,7 +62,7 @@ function App() {
           <input
             placeholder="Cauta"
             value={query}
-            onChange={(e) => changeQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
           />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import languageData from "./languageData";
+import languages from "./languages";
 
 function LanguageModal({ onLanguageClick, onCloseClick }) {
   return (
@@ -11,13 +11,10 @@ function LanguageModal({ onLanguageClick, onCloseClick }) {
             <img src="./images/close.png" className="close-image" />
           </div>
         </div>
-        {languageData.languages.map((language) => (
-          <div
-            className="language-button"
-            onClick={() => onLanguageClick(language.id)}
-          >
-            <img src={language.flagUrl} className="language-image" />
-            <div>{language.name}</div>
+        {languages.map(({ flagUrl, name, id }) => (
+          <div className="language-button" onClick={() => onLanguageClick(id)}>
+            <img src={flagUrl} className="language-image" />
+            <div>{name}</div>
           </div>
         ))}
       </div>
