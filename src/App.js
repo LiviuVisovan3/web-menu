@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import data from "./data.js";
-import LanguageModal from "./LanguageModal.js";
+import LanguageModal from "./components/LanguageModal.js";
 import languages from "./languages.js";
 
 function App() {
