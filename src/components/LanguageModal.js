@@ -3,7 +3,7 @@ import languages from "../languages";
 function LanguageModal({ onLanguageClick, onCloseClick }) {
   return (
     <>
-      <div className="modal-window"></div>
+      <div className="modal-backdrop"></div>
       <div className="modal">
         <div className="menu-header">
           <div className="language-menu">Menu language</div>
