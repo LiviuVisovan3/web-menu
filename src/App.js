@@ -1,17 +1,54 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import data from "./data.js";
+import LanguageMenu from "./LanguageMenu.js";
+import languageData from "./languageData.js";
 
 function App() {
-  const [selectedSectionIndex, setSelectedSectionIndex] = useState(1);
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(1);
+  const { sections } = data;
+
+  const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
+  const [selectedSectionId, setSelectedSectionId] = useState(sections[0].id);
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState();
+  const [query, changeQuery] = useState("");
+  const [language, changeLanguage] = useState("ro");
+  const [prevLanguage, setPrevLanguage] = useState("");
+
+  function handleSectionChange(section, index) {
+    setSelectedCategoryIndex();
+    setSelectedSectionIndex(index);
+    setSelectedSectionId(section.id);
+  }
+
+  function pickingLanguage(id) {
+    changeLanguage(id);
+  }
+  // useEffect(() => {
+  //   setPrevLanguage(language);
+  // }, [language]);
 
   return (
     <div className="App">
+      {!language && (
+        <LanguageMenu
+          languageChange={pickingLanguage}
+          prelanguage={prevLanguage}
+        />
+      )}
       <div className="page-header">
         <div className="corner-buttons">
-          <div className="button">
-            <img src="/romania-flag.webp" alt="romanian" />
-          </div>
+          {languageData.languages.map(
+            (currlanguage) =>
+              currlanguage.id === language && (
+                <div
+                  className="button"
+                  onClick={() => changeLanguage(() => "")}
+                >
+                  <img src={currlanguage.flagUrl} alt="romanian" />
+                </div>
+              )
+          )}
+
           <div className="button">
             <div className="dot-wrapper">
               <div className="dot"></div>
@@ -31,63 +68,46 @@ function App() {
       <div className="search-wrapper">
         <div className="input-wrapper">
           <img src="search.svg" alt="search" />
-          <input placeholder="Cauta" />
+          <input
+            placeholder="Cauta"
+            value={query}
+            onChange={(e) => changeQuery(e.target.value)}
+          />
         </div>
       </div>
       <div className="section-picker">
         <div
           className="slider"
-          style={{ left: `${selectedSectionIndex * 25}%` }}
+          style={{
+            left: `${selectedSectionIndex * (100 / sections.length)}%`,
+          }}
         ></div>
-        <div className="section" onClick={() => setSelectedSectionIndex(0)}>
-          Bar
-        </div>
-        <div className="section" onClick={() => setSelectedSectionIndex(1)}>
-          Restaurant
-        </div>
-        <div className="section" onClick={() => setSelectedSectionIndex(2)}>
-          Vinuri
-        </div>
-        <div className="section" onClick={() => setSelectedSectionIndex(3)}>
-          Deserturi
-        </div>
+        {sections.map((section, index) => (
+          <div
+            className="section"
+            onClick={() => handleSectionChange(section, index)}
+          >
+            {section.name[language]}
+          </div>
+        ))}
       </div>
       <div className="category-picker">
-        <div
-          className={`category-button ${
-            selectedCategoryIndex === 0 ? "selected" : ""
-          }`}
-          onClick={() => setSelectedCategoryIndex(0)}
-        >
-          <img src="/mic-dejun.webp" alt="mic dejun" />
-          <span>Mic Dejun</span>
-        </div>
-        <div
-          onClick={() => setSelectedCategoryIndex(1)}
-          className={`category-button ${
-            selectedCategoryIndex === 1 ? "selected" : ""
-          }`}
-        >
-          <img src="/pizza.webp" alt="pizza" />
-          <span>Pizza</span>
-        </div>
-        <div
-          className={`category-button ${
-            selectedCategoryIndex === 2 ? "selected" : ""
-          }`}
-          onClick={() => setSelectedCategoryIndex(2)}
-        >
-          <span>Sosuri</span>
-        </div>
-        <div
-          className={`category-button ${
-            selectedCategoryIndex === 3 ? "selected" : ""
-          }`}
-          onClick={() => setSelectedCategoryIndex(3)}
-        >
-          <img src="/fel-principal.webp" alt="fel principal" />
-          <span>Fel Principal</span>
-        </div>
+        {sections
+          .find((x) => x.id === selectedSectionId)
+          .categories.filter((x) =>
+            x.names[language].toLowerCase().startsWith(query)
+          )
+          .map((category, index) => (
+            <div
+              className={`category-button ${
+                selectedCategoryIndex === index ? "selected" : ""
+              }`}
+              onClick={() => setSelectedCategoryIndex(index)}
+            >
+              <img src={category.imgUrl} alt="mic dejun" />
+              <span>{category.names[language]}</span>
+            </div>
+          ))}
       </div>
     </div>
   );
