@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import data from "./data.js";
-import LanguageMenu from "./LanguageMenu.js";
+import LanguageModal from "./LanguageModal.js";
 import languageData from "./languageData.js";
 
 function App() {
@@ -11,8 +11,8 @@ function App() {
   const [selectedSectionId, setSelectedSectionId] = useState(sections[0].id);
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState();
   const [query, changeQuery] = useState("");
-  const [language, changeLanguage] = useState("ro");
-  const [prevLanguage, setPrevLanguage] = useState("");
+  const [language, setLanguage] = useState("ro");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleSectionChange(section, index) {
     setSelectedCategoryIndex();
@@ -20,19 +20,15 @@ function App() {
     setSelectedSectionId(section.id);
   }
 
-  function pickingLanguage(id) {
-    changeLanguage(id);
-  }
-  // useEffect(() => {
-  //   setPrevLanguage(language);
-  // }, [language]);
-
   return (
     <div className="App">
-      {!language && (
-        <LanguageMenu
-          languageChange={pickingLanguage}
-          prelanguage={prevLanguage}
+      {isModalOpen && (
+        <LanguageModal
+          onLanguageClick={(id) => {
+            setLanguage(id);
+            setIsModalOpen(false);
+          }}
+          onCloseClick={() => setIsModalOpen(false)}
         />
       )}
       <div className="page-header">
@@ -40,10 +36,7 @@ function App() {
           {languageData.languages.map(
             (currlanguage) =>
               currlanguage.id === language && (
-                <div
-                  className="button"
-                  onClick={() => changeLanguage(() => "")}
-                >
+                <div className="button" onClick={() => setIsModalOpen(true)}>
                   <img src={currlanguage.flagUrl} alt="romanian" />
                 </div>
               )
