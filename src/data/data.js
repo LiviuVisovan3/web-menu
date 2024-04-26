@@ -65,6 +65,17 @@ export default {
           },
           imgUrl: "images/salate.jpg",
         },
+        {
+          id: 6,
+          names: {
+            ro: "Sosuri",
+            en: "Salad",
+            es: "Ensalada",
+            fr: "Salade",
+            de: "Salat",
+          },
+          imgUrl: "images/salate.jpg",
+        },
       ],
     },
     {

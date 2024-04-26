@@ -1,11 +1,14 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import data from "./data.js";
+import data from "./data/data.js";
 import LanguageModal from "./components/LanguageModal.js";
-import languages from "./languages.js";
+import languages from "./data/languages.js";
+import Product from "./components/Product.js";
+import productsList from "./data/products.js";
 
 function App() {
   const { sections } = data;
+  const { products } = productsList;
 
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
   const [selectedSectionId, setSelectedSectionId] = useState(sections[0].id);
@@ -13,6 +16,8 @@ function App() {
   const [query, setQuery] = useState("");
   const [language, setLanguage] = useState("ro");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const selectedSection = sections.find((x) => x.id === selectedSectionId);
 
   function handleSectionChange(section, index) {
     setSelectedCategoryIndex();
@@ -83,11 +88,8 @@ function App() {
         ))}
       </div>
       <div className="category-picker">
-        {sections
-          .find((x) => x.id === selectedSectionId)
-          .categories.filter((x) =>
-            x.names[language].toLowerCase().startsWith(query)
-          )
+        {selectedSection.categories
+          .filter((x) => x.names[language].toLowerCase().startsWith(query))
           .map((category, index) => (
             <div
               className={`category-button ${
@@ -100,6 +102,18 @@ function App() {
             </div>
           ))}
       </div>
+      {selectedSection.categories.map((category) => (
+        <div className="product-list-wrapper">
+          <div className="product-list-category">
+            {category.names[language]}
+          </div>
+          {products
+            .filter((x) => x.categoryId === category.id)
+            .map((product) => (
+              <Product {...product} />
+            ))}
+        </div>
+      ))}
     </div>
   );
 }

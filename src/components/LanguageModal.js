@@ -1,4 +1,4 @@
-import languages from "../languages";
+import languages from "../data/languages";
 
 function LanguageModal({ onLanguageClick, onCloseClick }) {
   return (
