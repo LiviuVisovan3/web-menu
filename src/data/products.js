@@ -34,6 +34,7 @@ export default {
       quantity: "200g",
       price: 28.5,
       currency: "RON",
+      imgUrl: "./images/snitel-piept-pui.jpg",
     },
     {
       id: 202,
@@ -42,6 +43,7 @@ export default {
       quantity: "200g",
       price: 33,
       currency: "RON",
+      imgUrl: "./images/snitel-vienez.jpg",
     },
     {
       id: 301,
@@ -50,6 +52,7 @@ export default {
       quantity: "350g",
       price: 35,
       currency: "RON",
+      imgUrl: "./images/salata-vita.png",
     },
     {
       id: 302,
