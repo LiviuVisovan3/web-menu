@@ -1,10 +1,11 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import data from "./data/data.js";
-import LanguageModal from "./components/LanguageModal.js";
-import languages from "./data/languages.js";
-import Product from "./components/Product.js";
-import productsList from "./data/products.js";
+import data from "./data/data";
+import LanguageModal from "./components/LanguageModal";
+import languages, { LanguageCode } from "./data/languages";
+import Product from "./components/Product";
+import productsList from "./data/products";
+import React from "react";
 
 function App() {
   const { sections } = data;
@@ -12,17 +13,22 @@ function App() {
 
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
   const [selectedSectionId, setSelectedSectionId] = useState(sections[0].id);
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState();
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(
+    sections[0].categories[0].id
+  );
   const [query, setQuery] = useState("");
-  const [language, setLanguage] = useState("ro");
+  const [language, setLanguage] = useState<LanguageCode>("ro");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const selectedSection = sections.find((x) => x.id === selectedSectionId);
 
-  function handleSectionChange(section, index) {
-    setSelectedCategoryIndex();
+  function handleSectionChange(section: (typeof sections)[0], index: number) {
     setSelectedSectionIndex(index);
     setSelectedSectionId(section.id);
+  }
+
+  if (!selectedSection) {
+    return null;
   }
 
   return (
@@ -40,8 +46,8 @@ function App() {
         <div className="corner-buttons">
           <div className="button" onClick={() => setIsModalOpen(true)}>
             <img
-              src={languages.find((x) => x.id === language).flagUrl}
-              alt={languages.find((x) => x.id === language).name}
+              src={languages.find((x) => x.id === language)?.flagUrl}
+              alt={languages.find((x) => x.id === language)?.name}
             />
           </div>
 
@@ -80,6 +86,7 @@ function App() {
         ></div>
         {sections.map((section, index) => (
           <div
+            key={section.id}
             className="section"
             onClick={() => handleSectionChange(section, index)}
           >
@@ -92,6 +99,7 @@ function App() {
           .filter((x) => x.names[language].toLowerCase().startsWith(query))
           .map((category, index) => (
             <div
+              key={category.id}
               className={`category-button ${
                 selectedCategoryIndex === index ? "selected" : ""
               }`}
@@ -103,14 +111,14 @@ function App() {
           ))}
       </div>
       {selectedSection.categories.map((category) => (
-        <div className="product-list-wrapper">
+        <div key={category.id} className="product-list-wrapper">
           <div className="product-list-category">
             {category.names[language]}
           </div>
           {products
             .filter((x) => x.categoryId === category.id)
             .map((product) => (
-              <Product {...product} />
+              <Product key={product.id} {...product} />
             ))}
         </div>
       ))}

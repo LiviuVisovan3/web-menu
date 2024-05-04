@@ -1,11 +1,17 @@
-export default function Product({
-  name,
-  quantity,
-  calories,
-  price,
-  currency,
-  imgUrl,
-}) {
+import React from "react";
+
+type Props = {
+  name: string;
+  quantity: string;
+  price: number;
+  currency: string;
+  imgUrl?: string;
+  calories?: number;
+};
+
+export default function Product(props: Props) {
+  const { name, quantity, calories, price, currency, imgUrl } = props;
+
   return (
     <div className="product">
       <div className="product-info">
